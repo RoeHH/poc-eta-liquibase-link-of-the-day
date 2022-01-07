@@ -1,33 +1,41 @@
-// index.ts file
+import express from 'express';
+import createError from 'http-errors';
+import path from 'path';
 
-import * as express from "express";
+import indexRouter from './routes/index';
 
-import * as Eta from 'eta';
-var myTemplate = '<p>My favorite kind of cake is: <%= it.favoriteCake %></p>'
+// Initialize the express engine
+const app: express.Application = express();
+ 
+// Take a port 3000 for running server.
+const port: number = 3000;
 
-Eta.render(myTemplate, { favoriteCake: 'Chocolate!' })
-// Returns: '<p>My favorite kind of cake is: Chocolate!</p>'
+//Use ejs as view engine
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
+app.use(express.static(path.join(__dirname, 'public')));
 
-class App {
-  public app;
+app.use('/', indexRouter);
 
-  constructor() {
-    this.app = express();
-    this.setRoutes();
-  }
+app.use(function(req, res, next) {
+    next(createError(404));
+});
+  
 
-    setRoutes() {
-    this.app.get("/file", (req, res) => {
-      res.sendFile("index.html", { root: __dirname });
-    });
-    this.app.get("/eta", (req, res) => {
-      res.send(Eta.render(myTemplate, { favoriteCake: "Chocolate!" }));  
-    })
-    this.app.get("/", (req, res) =>
-      res.send("Welcome to Node.js and TypeScript!")
-    );
-  }
-}
+// error handler
+app.use(function(err:any, req:any, res:any, next:any) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-export default new App().app;
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
+});
+ 
+// Server setup
+app.listen(port, () => {
+    console.log(`TypeScript with Express: http://localhost:${port}/`);
+});
+
