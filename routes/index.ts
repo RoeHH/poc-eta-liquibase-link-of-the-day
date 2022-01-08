@@ -1,13 +1,14 @@
 import express from 'express';
 
-var router = express.Router();
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 
+let router = express.Router();
 
 // Handling '/' Request
-router.get('/', (req:any, res:any) => {
-    linkOfDayDB.select('*').then((rows:any) => {
-        res.json(rows);
-    });
+router.get('/', async (req, res) => {
+    let ding = await prisma.test.findMany({ include: { Test2: { take: 2 } } })
+    res.send(ding[1].Test2[0].name)
 });
 
 export = router;
