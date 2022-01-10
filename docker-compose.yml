@@ -1,0 +1,5 @@
+version: '3.0.0',
+services: 
+  db:
+    dockerfile:
+      path: ./postgres-db/docker-compose.yml
