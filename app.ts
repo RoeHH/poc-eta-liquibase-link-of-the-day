@@ -3,6 +3,7 @@ import createError from 'http-errors';
 import path from 'path';
 
 import indexRouter from './routes/index';
+import listRouter from './routes/list';
 
 // Initialize the express engine
 const app: express.Application = express();
@@ -16,7 +17,7 @@ app.set('view engine', 'ejs');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+app.use('/list', listRouter)
 app.use('/', indexRouter);
 
 app.use(function(req, res, next) {

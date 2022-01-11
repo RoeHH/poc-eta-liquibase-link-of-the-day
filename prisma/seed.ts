@@ -2,26 +2,19 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
+var date1 = new Date();
+date1.setMinutes(date1.getMinutes()-5);
+
 const main = async () => {
-    await prisma.test.create({
-        data: {
-            name: 'Test',
-            Test2: {
-                createMany: {
-                    data: [
-                        {
-                            name: 'Test2',
-                        },
-                        {
-                            name: 'Test2.2',
-                        },
-                        {
-                            name: 'Test2.3',
-                        }
-                    ]
-                }
-            },
+    await prisma.links.createMany({
+        data: [{
+            link: "https://www.youtube.com/watch?v=Oszl95YWfbs"
+        },
+        {
+            link: "https://www.youtube.com/watch?v=HeWX-lppv70",
+            createdAt: date1
         }
+    ]
     })
 };
 

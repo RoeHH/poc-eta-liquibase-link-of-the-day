@@ -6,9 +6,8 @@ const prisma = new PrismaClient()
 let router = express.Router();
 
 router.get('/', async (req, res) => {
-    let reDirLink = (await prisma.links.findMany()).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[0]
-    res.redirect(reDirLink.link);
+    let links = await prisma.links.findMany();
+    res.render('list', { links });
 });
-
 
 export = router;

@@ -4,17 +4,21 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "dev": "tsnd --respawn --rs app.ts",
-    "start": "ts-node-transpile-only app.ts",
-    "prisma:init": "prisma db push && prisma db seed && prisma generate",
-    "prisma:g": "prisma generate"
+    "predev": "docker compose -f ./postgres-db/docker-compose.yml up -d --force-recreate && dotenv -e .env -e .env.dev -- prisma migrate reset",
+    "dev": "dotenv -e .env -e .env.dev -- tsnd --respawn --rs app.ts",
+    "prestart": "dotenv -e .env -e .env.prod -- npm run prisma:init:prod",
+    "start": "dotenv -e .env -e .env.prod -- ts-node-transpile-only app.ts",
+    "docker": "docker build . -t ejs-prisma-ts/poc && docker run -p 8080:3000 -d ejs-prisma-ts/poc && echo \"Container Port mapped to \"http://localhost:8080/\"",
+    "prisma:init:prod": "prisma generate && prisma db push",
+    "prisma:g": "prisma generate",
+    "prisma:pg": "dotenv -e .env -e .env.dev -- prisma studio &"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RoeHH/poc-eta-liquibase-link-of-the-day.git"
   },
   "prisma": {
-    "seed": "ts-node prisma\\seed.ts"
+    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",

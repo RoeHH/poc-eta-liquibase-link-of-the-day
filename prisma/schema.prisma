@@ -7,17 +7,9 @@ datasource db {
   url      = env("DB_CONNECTION")
 }
 
-model Test {
+model Links {
   id        Int      @id @default(autoincrement())
-  name      String
+  link      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Test2     Test2[]
-}
-
-model Test2 {
-  id     Int    @id @default(autoincrement())
-  name   String
-  test   Test   @relation(fields: [testID], references: [id])
-  testID Int
 }
